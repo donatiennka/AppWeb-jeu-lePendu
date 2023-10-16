@@ -140,6 +140,14 @@ footer {
  * Mise en forme des éléments de la zone principale
  */
 
+/* Identification du joueur */
+.nomJoueur {
+    width: 80%;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+}
+ 
 /* Zone d'options */
 .zoneOptions p {
     line-height: 1.5rem;
@@ -243,8 +251,13 @@ footer {
 
 /* Eléments du formulaire de saisie */
 .nomJoueur input[type='text'] {
+    width: 80%;
     text-align: center;
     margin-bottom: 30px;
+}
+
+.nomJoueur button {
+    width: 20%;
 }
 
 .zoneSaisie input[type='text'] {
