@@ -81,3 +81,16 @@ function afficherIndiceMot(indiceMot) {
     zoneIndiceMot.innerText = indiceMot
 }
 
+/**
+ * Cette fonction remplace le mot à déviner par une chaine de "*" de même 
+ * longueur que le mot proposé
+ * @param {number}nbLettres : la longueur du mot proposé
+ */
+function masquerLeMot(nbLettres) {
+    let masqueMot = ""
+    for (i = 0; i < nbLettres; i++){
+        masqueMot += "*"
+    }
+    return masqueMot
+}
+
