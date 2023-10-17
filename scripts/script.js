@@ -19,7 +19,7 @@ function afficherScore(score, nbMotsProposes) {
 
 /**
  * Cette fonction affiche dans la partie dédiée les gains du joueur
- * @param {number} gains : les gains de la partie
+ * @param {number} gains : les gains de la partie libéllés en unité (U)
  */
 function afficherGains(gains) {
     // Récupération de la zone dans laquelle on va écrire le score
@@ -30,7 +30,16 @@ function afficherGains(gains) {
     spanGains.innerText = affichageGains
 }
 
-afficherScore(5, 10)
-afficherGains(7)
-console.log("La liste des mots a : " +listeMots.length + " élements") 
-console.log("La liste des indices a : " +listeDesIndices.length + " élements")
+/**
+ * Cette fonction génére un numéro aléatoire qui servira pour choisir le mot
+ * à proposer au joueur.
+ * @param {number} min : ici c'est 0 le premier indice d'un tableau
+ * @param {number} max : ici c'est la longueur de la liste des mots
+ * le maximum est exclu et le minimum est inclu (de 0 à max - 1)
+ */
+function getRandomInt(min, max) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min) + min)
+}
+
