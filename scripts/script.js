@@ -43,3 +43,41 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min)
 }
 
+/**
+ * Cette fonction affiche une proposition, que le joueur devra déviner, 
+ * dans la zone "zoneProposition"
+ * @param {string} proposition : la proposition à afficher
+ */
+function afficherProposition(proposition) {
+    let zoneProposition = document.querySelector(".zoneProposition")
+    zoneProposition.innerText = proposition
+}
+
+/**
+ * Cette fonction renvoie la longueur du mot proposé 
+ * @param {number} indice : le numéro d'indice du mot
+ */
+function longueurMot (indice) {
+    return listeMots[indice].length
+}
+
+/**
+ * Cette fonction affiche le nombre de lettres du mot proposé, 
+ * dans la zone "nombreDeLettre"
+ * @param {number} nbLettres : La longueur du mot proposé
+ */
+function afficherNbLettres(nbLettres) {
+    let zoneNbLettres = document.querySelector(".nombreDeLettre span")
+    zoneNbLettres.innerText = nbLettres
+}
+
+/**
+ * Cette fonction affiche un indice, pour aider le joueur qui le souhaite, 
+ * dans la zone "zoneDesIndices"
+ * @param {string} indiceMot : pour mettre le joueur su r la piste
+ */
+function afficherIndiceMot(indiceMot) {
+    let zoneIndiceMot = document.querySelector(".indice span")
+    zoneIndiceMot.innerText = indiceMot
+}
+
