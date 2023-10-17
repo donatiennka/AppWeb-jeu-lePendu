@@ -27,13 +27,13 @@
         <main>
            
             <div class="zoneOptions">
-                <p>Choisissez votre option et commencez le jeu. <br> <strong>Attention :</strong> 
+                <p>Vous pouvez choisir d'afficher l'indice à tout moment.<br> <strong>Attention :</strong> 
                 si vous choisissez de jouer avec des indices, <br> vous n'aurez que la moitié des points gagnés :)</p>
                 <div class="optionSource">
                     <input type="radio" name="optionSource" id="mots" value="1" checked>
                     <label for="mots">Sans indice</label>
                     <input type="radio" name="optionSource" id="phrases" value="2">
-                    <label for="phrases">Avec indice</label>
+                    <label for="phrases">Afficher l'indice</label>
                 </div>
             </div>
 
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="zoneInfos">
-                    <div class="info">Bien joué !</div> 
+                    <div class="info">Cliquez sur "commencez le jeu"</div> 
                     <div class="tentative">
                         encore : <span>__</span>/8 coups.
                     </div>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="zoneDeControle">
                     <button id="btnMotSuivant">Commencez le jeu</button>
-                    <button id="btnMotSuivant" disabled="true">Mot Suivant</button>
+                    <button id="btnMotSuivant">Mot Suivant</button>
                     <button id="btnArrêtJeu">Quittez le Jeu</button>
                 </div>
             </div>
