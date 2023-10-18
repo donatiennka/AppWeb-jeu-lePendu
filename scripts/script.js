@@ -92,6 +92,25 @@ function afficherInfos(info) {
 }
 
 /**
+ * Cette fonction affiche les informations au cours du jeu, 
+ * dans la zone "zoneInfos"
+ * @param {number} reste : pour mettre à jour les coups restants à jouer
+ */
+function afficherConpRestant(reste) {
+    let zoneTentative = document.querySelector(".tentative span")
+    zoneTentative.innerText = reste
+}
+
+/**
+ * Cette fonction supprime l'affichage des coups restant, 
+ * dans la zone "zoneInfos"
+ */
+function supprimeAffichageTentative() {
+    let zoneTentative = document.querySelector(".tentative")
+    zoneTentative.innerText = ""
+}
+
+/**
  * Cette fonction remplace le mot à déviner par une chaine de "*" de même 
  * longueur que le mot proposé
  * @param {number}nbLettres : la longueur du mot proposé
@@ -128,6 +147,39 @@ function RemplacerSiLettreDansMot(lettre, mot, motCacher) {
 }
 
 /**
+ * Cette fonction prend la saisie du joueur en paramètre et valide qu'il est au bon format. 
+ * @param {string} laSaisie : ce que le joueur à saisi. S'agit-il effectivement d'un lettre
+ * de l'alphabet ?
+ * @throws {Error}
+ */
+function validerLaSaisie(laSaisie) {
+    let laSaisieRegExp = new RegExp("[a-zA-Z]")
+    if (!laSaisieRegExp.test(laSaisie)) {
+        throw new Error("Le caractère saisi n'est pas admissible.")
+    }  
+}
+
+/**
+ * Cette fonction affiche le message d'erreur passé en paramètre. 
+ * dans la zone d'information.
+ * @param {string} message 
+ */
+function afficherMessageErreur(message) {
+    
+    let spanErreurMessage = document.getElementById("erreurMessage")
+
+    if (!spanErreurMessage) {
+        let popup = document.querySelector(".popup")
+        spanErreurMessage = document.createElement("span")
+        spanErreurMessage.id = "erreurMessage"
+        
+        popup.append(spanErreurMessage)
+    }
+    
+    spanErreurMessage.innerText = message
+}
+
+/**
  * Cette fonction lance le jeu. 
  * Dès que le joueur clique sur "Lancez le jeu" la boucle de jeu se lance 
  * et s'arrêtera lorsque celui-ci cliquera sur "Quittez le jeu"
@@ -141,7 +193,8 @@ function lancerJeu() {
     let i = 0
     let coupRestant = nbCoups
     let nbLettres = 0
-    let motChiffrer = ""
+    let gains = 0
+    let motTrouver = ""
     let infoContinue = ""
 
     let btnValiderLettre = document.getElementById("btnValiderLettre")
@@ -168,8 +221,8 @@ function lancerJeu() {
         // On mesure la longueur du mot
         nbLettres = longueurMot(i)
         // On affiche le mot proposé mais en le masquant
-        motChiffrer = masquerLeMot(nbLettres)
-        afficherProposition(motChiffrer)
+        motTrouver = masquerLeMot(nbLettres)
+        afficherProposition(motTrouver)
         // On affiche la longueur du mot proposé
         afficherNbLettres(nbLettres)
         // On désactive le bouton "Lancer le jeu"
@@ -180,114 +233,79 @@ function lancerJeu() {
         nbMotsProposes ++
         // On active le bouton validé
         btnValiderLettre.disabled = false
+        console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)
 
-        
         // Gestion de l'événement click sur le bouton "valider"
         btnValiderLettre.addEventListener("click", () => {
-            // On converti la chaîne de caratère en tableau
-            let myTab = motChiffrer.split("")
-            // On récupère la lettre tapez
-            let inputLettre = inputEcriture.value
-            // On la met en majuscule
-            inputLettre = inputLettre.toUpperCase()
-            for (let x = 0; x < nbLettres; x++){
+        // On converti la chaîne de caratère en tableau
+        let myTab = motTrouver.split("")
+        // On récupère la lettre tapez qu'on met systématique en majuscule
+        let inputLettre = inputEcriture.value.toUpperCase()
+        console.log("la lettre saisie est : "+inputLettre)
+        // On vide le champs de saisie
+        inputEcriture.value = ""            
+        // On test si la lettre saisie fait partir des lettres du mot proposé
+        // Si oui on démasque les lettres correspondantes
+        if (motADeviner.includes(inputLettre)) {
+            // Mise à jour du message d'information
+            infoContinue = "Bien joué !"
+            // On parcours le mot à déviner pour recupérer la position des lettres
+            // à remplacer
+            for (let x = 0; x < nbLettres; x++) {
                 if (inputLettre === motADeviner[x]) {
-                    myTab[x] = inputLettre
-                    // On met à jour la zone d'information
-                    infoContinue
+                    // On remplace la lettre masquée
+                    myTab[x] = inputLettre 
                 }
+            }  
+        
+        } else {
+            // On diminue les coups restant d'une unité
+            coupRestant --
+            // Mise à jour du message d'information
+            infoContinue = "Oups, mauvaise pioche."
+        }
+        
+        // On affiche le mot qu'il soit partiellemnt ou totalement chiffré 
+        motTrouver = myTab.join("")
+        afficherProposition(motTrouver)
+        // On test si le joueur à trouver le mot ou si il n'a plus de coups à jouer.
+        if (motTrouver === motADeviner || coupRestant === 0) {
+            // On désactive le bouton valider
+            btnValiderLettre.disabled = true
+            // On désactive le champs de saisie pour empêcher toute nouvelle saisie
+            inputEcriture.disabled = true
+            // On active les boutons motSuivant et arreterJeu
+            btnMotSuivant.disabled = false
+            btnArreterJeu.disabled = false
+            // Est-ce que c'est le mot qui à été trouvé ?
+            if (motTrouver === motADeviner) {
+                // Bingo ! on met à jour le score
+                score++
+                // On met à jour les gains
+                gains += coupRestant
+                afficherProposition("BRAVOOO VOUS AVEZ GAGNE !!!")
+            } else {
+                afficherProposition("OUPS VOUS AVEZ PERDU !!!")
             }
+            infoContinue = "<< Clickez sur Mot Suivant pour continuer ou Quittez le jeu. >>"
+            supprimeAffichageTentative()
+            afficherInfos(infoContinue)
+            afficherScore(score, nbMotsProposes)
+            afficherGains(gains)
+        } else {
+            // On affiche l'information à l'issue du traitement
+            afficherInfos(infoContinue)
+            // On affiche les tentatives restantes
+            afficherConpRestant(coupRestant)
+        }
+        
+
+        })
             
-            })
+        
     })
    
-
-    // Gestion de l'événement click sur le bouton "valider"
-   /* btnValiderLettre.addEventListener("click", () => {
-        if (inputEcriture.value === listeProposition[i]) {
-            score++
-        }
-        console.log(inputEcriture.value)
-        i++
-        afficherResultat(score, i)
-        inputEcriture.value = ''
-        if (listeProposition[i] === undefined) {
-            afficherProposition("Le jeu est fini")
-            // On désactive le bouton valider
-            btnValiderMot.disabled = true
-            // On désactive les boutons radios
-            for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
-                listeBtnRadio[indexBtnRadio].disabled = true
-            }
-
-        } else {
-            afficherProposition(listeProposition[i])
-        }
-    })
-
-    // Gestion de l'événement change sur les boutons radios. 
-    
-    for (let index = 0; index < listeBtnRadio.length; index++) {
-        listeBtnRadio[index].addEventListener("change", (event) => {
-            // Si c'est le premier élément qui a été modifié, alors nous voulons
-            // jouer avec la listeMots. 
-            if (event.target.value === "1") {
-                listeProposition = listeMots
-            } else {
-                // Sinon nous voulons jouer avec la liste des phrases
-                listeProposition = listePhrases
-            }
-            // Et on modifie l'affichage en direct. 
-            afficherProposition(listeProposition[i])
-        })
-    }
-
-    // Gestion de l'événement submit sur le formulaire de partage. 
-    let form = document.querySelector("form")
-    form.addEventListener("submit", (event) => {
-        event.preventDefault()
-        let scoreEmail = `${score} / ${i}`
-        gererFormulaire(scoreEmail)
-    })
-
-    afficherResultat(score, i)*/
 }
-
-/* 
-afficherScore(5, 10)
-afficherGains(7)
-console.log("La liste des mots a : " +listeMots.length + " élements") 
-console.log("La liste des indices a : " +listeDesIndices.length + " élements")
-
-let nombreEntier = getRandomInt(0, listeMots.length)
-console.log("le nombre aléatoire entier est : " +nombreEntier)
-afficherProposition(listeMots[nombreEntier])
-let nbLettres = longueurMot(nombreEntier)
-afficherNbLettres(nbLettres)
-afficherIndiceMot(listeDesIndices[nombreEntier])
-
-console.log(masquerLeMot(nbLettres))
-
-let test = "ihjPTUao"
-test = test.toUpperCase()
-console.log(test)
-
-let myString = "BANANE"
-let tabString = myString.split("")
-console.log(tabString)
-let newString = tabString.join("")
-console.log(newString)*/
-
+    
+// On lance le jeu
 lancerJeu()
-
-const monTab = ["a", "e", "d", "m"]
-const trouver = []
-let maLetr = "d"
-if (monTab.includes(maLetr)){
-    console.log("Vrai")
-    trouver.push(maLetr)
-    
-} else {
-    console.log("Faux")
-}
-console.log(trouver)
