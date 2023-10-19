@@ -94,7 +94,7 @@ function afficherCoupRestant(text) {
 }
 
 /**
- * Cette fonction remplace le mot à déviner par une chaine de "*" de même 
+ * Cette fonction remplace le mot à déviner par une chaine de "#" de même 
  * longueur que le mot proposé
  * @param {number}nbLettres : la longueur du mot proposé
  */
@@ -104,6 +104,89 @@ function masquerLeMot(nbLettres) {
         masqueMot += "#"
     }
     return masqueMot
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////// ICI ON GERE LES FONCTIONS POUR LE FORMULAIRE DE PARTAGE ///////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Cette fonction construit et affiche l'email. 
+ * @param {string} nom : le nom du joueur
+ * @param {string} email : l'email de la personne avec qui il veut partager son score
+ * @param {string} score : le score. 
+ */
+function afficherEmail(nom, email, score) {
+    let mailto = `mailto:${email}?subject=Partage du score LePendu&body=Salut, je suis ${nom} et je viens de réaliser le score de ${score} sur le site du Jeu-LePendu !`
+    location.href = mailto
+}
+
+/**
+ * Cette fonction prend un nom en paramètre et valide qu'il est au bon format
+ * ici : deux caractères au minimum
+ * @param {string} nom 
+ * @throws {Error}
+ */
+function validerNom(nom) {
+    if (nom.length < 2) {
+        throw new Error("Le nom est trop court. ")
+    }
+    
+}
+
+/**
+ * Cette fonction prend un email en paramètre et valide qu'il est au bon format. 
+ * @param {string} email 
+ * @throws {Error}
+ */
+function validerEmail(email) {
+    let emailRegExp = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+")
+    if (!emailRegExp.test(email)) {
+        throw new Error("L'email n'est pas valide.")
+    }
+    
+}
+
+/**
+ * Cette fonction affiche le message d'erreur passé en paramètre. 
+ * Si le span existe déjà, alors il est réutilisé pour ne pas multiplier
+ * les messages d'erreurs. 
+ * @param {string} message 
+ */
+function afficherMessageErreur(message) {
+    
+    let spanErreurMessage = document.getElementById("erreurMessage")
+
+    if (!spanErreurMessage) {
+        let popup = document.querySelector(".popup")
+        spanErreurMessage = document.createElement("span")
+        spanErreurMessage.id = "erreurMessage"
+        
+        popup.append(spanErreurMessage)
+    }
+    
+    spanErreurMessage.innerText = message
+}
+
+/**
+ * Cette fonction permet de récupérer les informations dans le formulaire
+ * de la popup de partage et d'appeler l'affichage de l'email avec les bons paramètres.
+ * @param {string} scoreEmail 
+ */
+function gererFormulaire(scoreEmail) {
+    try {
+        let baliseNom = document.getElementById("nom")
+        let nom = baliseNom.value
+        validerNom(nom)
+    
+        let baliseEmail = document.getElementById("email")
+        let email = baliseEmail.value
+        validerEmail(email)
+        afficherMessageErreur("")
+        afficherEmail(nom, email, scoreEmail)
+
+    } catch(erreur) {
+        afficherMessageErreur(erreur.message)
+    }
+    
 }
 
 /**
@@ -125,6 +208,8 @@ function afficherMessageErreur(message) {
     
     spanErreurMessage.innerText = message
 }
+
+///////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Cette fonction choisi un mot à proposer dans la liste des mots 
@@ -153,7 +238,6 @@ function genererLeMotPropose() {
  */
 function lancerJeu() {
     // Initialisations
-    //initAddEventListenerPopup()
     let score = 0
     let gains = 0
     let i = 0
@@ -321,6 +405,9 @@ function lancerJeu() {
         // On désactive le bouton "Mot Suivant" et "Quittez le jeu"
         btnMotSuivant.disabled = true
         btnArreterJeu.disabled = true
+        // On initialise la popup pour le partage
+        initAddEventListenerPopup()
+        
         // On active le bonton "lancez le jeu"
         btnDebuterJeu.disabled = false
         // On met à jour la zone d'information
@@ -361,8 +448,4 @@ function lancerJeu() {
         let scoreEmail = `${score} / ${nbMotsProposes} ; total gains : ${gains}`
         gererFormulaire(scoreEmail)
     })
-
 }
-    
-// On lance le jeu
-lancerJeu()
