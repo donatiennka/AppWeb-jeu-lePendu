@@ -152,16 +152,18 @@ function afficherMessageErreur(message) {
  * à partir d'un nombre généré au hassard   
  */
 function genererLeMotPropose() {
+    // On génére le nombre aléatoire
+    let i = getRandomInt(0, listeMots.length)
     // On extrait le mot à proposé de la liste des mots
     // de façon aléatoire grâce à la méthode getRandomInt
-    let motADeviner = listeMots[getRandomInt(0, listeMots.length)]
+    let motADeviner = listeMots[i]
     // On affiche le mot proposé mais en le masquant
     motTrouver = masquerLeMot(motADeviner.length)
     afficherProposition(motTrouver)
     // On affiche la longueur du mot proposé
     afficherNbLettres("...mot de "+motADeviner.length+" lettres")
     //On retoune la liste des valeurs générées
-    const valeurs = [motADeviner, motTrouver]
+    const valeurs = [i, motADeviner, motTrouver]
     return valeurs
 }
 
@@ -175,6 +177,7 @@ function lancerJeu() {
     //initAddEventListenerPopup()
     let score = 0
     let gains = 0
+    let i = 0
     let motADeviner = ""
     let nbMotsProposes = 0
     let coupRestant = nbCoups
@@ -209,8 +212,9 @@ function lancerJeu() {
         // On appelle la fonction qui génére le mot à proposer 
         let valeurs = genererLeMotPropose()
         // On extrait les valeurs retournées
-        motADeviner = valeurs[0]
-        motTrouver = valeurs[1]
+        i = valeurs[0]
+        motADeviner = valeurs[1]
+        motTrouver = valeurs[2]
         // On affiche le message qui informe sur le début de la partie
         afficherInfos("C'est partie !")
         // On désactive le bouton "Lancer le jeu"
@@ -219,6 +223,12 @@ function lancerJeu() {
         inputEcriture.disabled = false
         // On met à jour le nombre de mot proposé
         nbMotsProposes ++
+        // On active les boutons radios
+        for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
+            listeBtnRadio[indexBtnRadio].disabled = false
+        }
+        // On coche le bouton radio "sans indice" par défaut
+        listeBtnRadio[0].checked = true
         // On active le bouton validé
         btnValiderLettre.disabled = false
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)        
@@ -275,6 +285,7 @@ function lancerJeu() {
             infoContinue = "<< Clickez sur Mot Suivant pour continuer ou Quittez le jeu. >>"
             afficherCoupRestant("")
             afficherNbLettres("Le mot à trouver était : "+motADeviner)
+            afficherIndiceMot("")
             afficherInfos(infoContinue)
             afficherScore(score, nbMotsProposes)
             afficherGains(gains)
@@ -293,13 +304,14 @@ function lancerJeu() {
 
     })
 
-    // Gestion de l'événement click sur le bouton "valider"
+    // Gestion de l'événement click sur le bouton "Mot Suivant"
     btnMotSuivant.addEventListener("click", () => {
         // On appelle la fonction qui génére le mot à proposer 
         let valeurs = genererLeMotPropose()
         // On extrait les valeurs retournées
-        motADeviner = valeurs[0]
-        motTrouver = valeurs[1]
+        i = valeurs[0]
+        motADeviner = valeurs[1]
+        motTrouver = valeurs[2]
         // On affiche le message qui informe sur le début de la partie
         afficherInfos("Un autre mot à déviner !")
         // On désactive le bouton "Mot Suivant" et "Quittez le jeu"
@@ -311,10 +323,16 @@ function lancerJeu() {
         nbMotsProposes ++
         // On active le bouton validé
         btnValiderLettre.disabled = false
+        // On active les boutons radios
+        for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
+            listeBtnRadio[indexBtnRadio].disabled = false
+        }
+        // On coche le bouton radio "sans indice" par défaut
+        listeBtnRadio[0].checked = true
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner) 
     })
 
-    // Gestion de l'événement click sur le bouton "valider"
+    // Gestion de l'événement click sur le bouton "Quittez le jeu"
     btnArreterJeu.addEventListener("click", () => {
         // On affiche le message d'au revoir
         afficherProposition("AU REVOIR ET A BIENTÔT !")
@@ -329,6 +347,27 @@ function lancerJeu() {
         // On met à jour la zone d'information
         afficherInfos("Vous avez gagné : " +gains+ " points, avec un score de : " +score+"/" +nbMotsProposes)
      })
+
+    // Gestion de l'événement change sur les boutons radios. 
+    for (let index = 0; index < listeBtnRadio.length; index++) {
+        listeBtnRadio[index].addEventListener("change", (event) => {
+            let indice = ""
+            // Si c'est le premier élément qui a été modifié, alors nous voulons
+            // jouer sans les indices. 
+            if (event.target.value === "1") {
+                indice = "N/A"
+            } else {
+                // Sinon nous voulons jouer ce mot avec l'indice
+                indice = listeDesIndices[i]
+            }
+            // Et on affiche l'indice. 
+            afficherIndiceMot("Indice : "+indice)
+            // On désactive les boutons radios
+            for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
+                listeBtnRadio[indexBtnRadio].disabled = true
+            }
+        })
+    }
 
 }
     
