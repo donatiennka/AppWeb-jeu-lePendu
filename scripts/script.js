@@ -107,19 +107,6 @@ function masquerLeMot(nbLettres) {
 }
 
 /**
- * Cette fonction prend la saisie du joueur en paramètre et valide qu'il est au bon format. 
- * @param {string} laSaisie : ce que le joueur à saisi. S'agit-il effectivement d'un lettre
- * de l'alphabet ?
- * @throws {Error}
- */
-function validerLaSaisie(laSaisie) {
-    let laSaisieRegExp = new RegExp("[a-zA-Z]")
-    if (!laSaisieRegExp.test(laSaisie)) {
-        throw new Error("Le caractère saisi n'est pas admissible.")
-    }  
-}
-
-/**
  * Cette fonction affiche le message d'erreur passé en paramètre. 
  * dans la zone d'information.
  * @param {string} message 
