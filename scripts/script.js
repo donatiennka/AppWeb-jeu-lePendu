@@ -54,14 +54,6 @@ function afficherProposition(proposition) {
 }
 
 /**
- * Cette fonction renvoie la longueur du mot proposé 
- * @param {number} indice : le numéro d'indice du mot
- */
-function longueurMot (indice) {
-    return listeMots[indice].length
-}
-
-/**
  * Cette fonction affiche le nombre de lettres du mot proposé, 
  * dans la zone "nombreDeLettre"
  * @param {string} chaine : La longueur du mot proposé
