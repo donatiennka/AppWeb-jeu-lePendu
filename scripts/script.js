@@ -64,11 +64,11 @@ function longueurMot (indice) {
 /**
  * Cette fonction affiche le nombre de lettres du mot proposé, 
  * dans la zone "nombreDeLettre"
- * @param {number} nbLettres : La longueur du mot proposé
+ * @param {string} chaine : La longueur du mot proposé
  */
-function afficherNbLettres(nbLettres) {
+function afficherNbLettres(chaine) {
     let zoneNbLettres = document.querySelector(".nombreDeLettre span")
-    zoneNbLettres.innerText = nbLettres
+    zoneNbLettres.innerText = chaine
 }
 
 /**
@@ -84,30 +84,21 @@ function afficherIndiceMot(indiceMot) {
 /**
  * Cette fonction affiche les informations au cours du jeu, 
  * dans la zone "zoneInfos"
- * @param {string} info : pour mettre à jour les information de la partie
+ * @param {string} chaineInfo : pour mettre à jour les information de la partie
  */
-function afficherInfos(info) {
-    let zoneInfos = document.querySelector(".zoneInfos .info")
-    zoneInfos.innerText = info
+function afficherInfos(chaineInfo) {
+    let zoneInfos = document.querySelector(".info span")
+    zoneInfos.innerText = chaineInfo
 }
 
 /**
  * Cette fonction affiche les informations au cours du jeu, 
  * dans la zone "zoneInfos"
- * @param {number} reste : pour mettre à jour les coups restants à jouer
+ * @param {string} text : pour mettre à jour les coups restants à jouer
  */
-function afficherConpRestant(reste) {
+function afficherCoupRestant(text) {
     let zoneTentative = document.querySelector(".tentative span")
-    zoneTentative.innerText = reste
-}
-
-/**
- * Cette fonction supprime l'affichage des coups restant, 
- * dans la zone "zoneInfos"
- */
-function supprimeAffichageTentative() {
-    let zoneTentative = document.querySelector(".tentative")
-    zoneTentative.innerText = ""
+    zoneTentative.innerText = text
 }
 
 /**
@@ -118,32 +109,9 @@ function supprimeAffichageTentative() {
 function masquerLeMot(nbLettres) {
     let masqueMot = ""
     for (i = 0; i < nbLettres; i++){
-        masqueMot += "@"
+        masqueMot += "#"
     }
     return masqueMot
-}
-
-/**
- * Cette fonction permet de savoir si la lettre entrée appartient ou non 
- * au mot proposé si c'est le cas, cette lettre remplacera l'étoile correspondant
- * dans le mot à découvrir 
- * @param {string}lettre : la lettre entrée
- * @param {string}mot : le mot proposé
- * @param {string}motCacher : le mot masqué par les '*'
- */
-function RemplacerSiLettreDansMot(lettre, mot, motCacher) {
-    motCacher = motCacher.split("")
-    let infoTraitement = ""
-    for (i = 0; i < mot.length; i++){
-        if (lettre === mot[i]) {
-            motCacher[i] = lettre
-            infoTraitement = "Bien joué !"
-        } else {
-            infoTraitement = "... non cette lettre ne figure pas dans le mot."
-        } 
-    }
-    motCacher = motCacher.join("")
-    return motCacher, infoTraitement
 }
 
 /**
@@ -180,6 +148,24 @@ function afficherMessageErreur(message) {
 }
 
 /**
+ * Cette fonction choisi un mot à proposer dans la liste des mots 
+ * à partir d'un nombre généré au hassard   
+ */
+function genererLeMotPropose() {
+    // On extrait le mot à proposé de la liste des mots
+    // de façon aléatoire grâce à la méthode getRandomInt
+    let motADeviner = listeMots[getRandomInt(0, listeMots.length)]
+    // On affiche le mot proposé mais en le masquant
+    motTrouver = masquerLeMot(motADeviner.length)
+    afficherProposition(motTrouver)
+    // On affiche la longueur du mot proposé
+    afficherNbLettres("...mot de "+motADeviner.length+" lettres")
+    //On retoune la liste des valeurs générées
+    const valeurs = [motADeviner, motTrouver]
+    return valeurs
+}
+
+/**
  * Cette fonction lance le jeu. 
  * Dès que le joueur clique sur "Lancez le jeu" la boucle de jeu se lance 
  * et s'arrêtera lorsque celui-ci cliquera sur "Quittez le jeu"
@@ -188,12 +174,10 @@ function lancerJeu() {
     // Initialisations
     //initAddEventListenerPopup()
     let score = 0
+    let gains = 0
     let motADeviner = ""
     let nbMotsProposes = 0
-    let i = 0
     let coupRestant = nbCoups
-    let nbLettres = 0
-    let gains = 0
     let motTrouver = ""
     let infoContinue = ""
 
@@ -209,41 +193,45 @@ function lancerJeu() {
     btnValiderLettre.disabled = true
     btnMotSuivant.disabled = true
     btnArreterJeu.disabled = true
-
-    //afficherProposition(listeProposition[i])
-    
+    // On désactive le champs de saisie pour empêcher toute saisie 
+    // avant d'avoir lancez le jeu
+    inputEcriture.disabled = true
+   
     // Gestion de l'événement click sur le bouton "Lancez le jeu"
     btnDebuterJeu.addEventListener("click", () => {
-        // On génére i pour afficher le premier mot de la partie
-        i = getRandomInt(0, listeMots.length)
-        // On extrait le mot à proposé de la liste des mots
-        motADeviner = listeMots[i]
-        // On mesure la longueur du mot
-        nbLettres = longueurMot(i)
-        // On affiche le mot proposé mais en le masquant
-        motTrouver = masquerLeMot(nbLettres)
-        afficherProposition(motTrouver)
-        // On affiche la longueur du mot proposé
-        afficherNbLettres(nbLettres)
-        // On désactive le bouton "Lancer le jeu"
-        btnDebuterJeu.disabled = true
+        // Réinitialisation de certaines variables
+        score = 0
+        gains = 0
+        nbMotsProposes = 0
+        // On affiche le score et les gains rénitialisés
+        afficherScore(score, nbMotsProposes)
+        afficherGains(gains)
+        // On appelle la fonction qui génére le mot à proposer 
+        let valeurs = genererLeMotPropose()
+        // On extrait les valeurs retournées
+        motADeviner = valeurs[0]
+        motTrouver = valeurs[1]
         // On affiche le message qui informe sur le début de la partie
         afficherInfos("C'est partie !")
-        // On incrémente le nombre de mot proposé
+        // On désactive le bouton "Lancer le jeu"
+        btnDebuterJeu.disabled = true
+        // On active le champs de saisie
+        inputEcriture.disabled = false
+        // On met à jour le nombre de mot proposé
         nbMotsProposes ++
         // On active le bouton validé
         btnValiderLettre.disabled = false
-        console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)
-
-        // Gestion de l'événement click sur le bouton "valider"
-        btnValiderLettre.addEventListener("click", () => {
+        console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)        
+    })
+    
+    // Gestion de l'événement click sur le bouton "valider"
+    btnValiderLettre.addEventListener("click", () => {
         // On converti la chaîne de caratère en tableau
         let myTab = motTrouver.split("")
         // On récupère la lettre tapez qu'on met systématique en majuscule
         let inputLettre = inputEcriture.value.toUpperCase()
-        console.log("la lettre saisie est : "+inputLettre)
         // On vide le champs de saisie
-        inputEcriture.value = ""            
+        inputEcriture.value = ""           
         // On test si la lettre saisie fait partir des lettres du mot proposé
         // Si oui on démasque les lettres correspondantes
         if (motADeviner.includes(inputLettre)) {
@@ -251,7 +239,7 @@ function lancerJeu() {
             infoContinue = "Bien joué !"
             // On parcours le mot à déviner pour recupérer la position des lettres
             // à remplacer
-            for (let x = 0; x < nbLettres; x++) {
+            for (let x = 0; x < motADeviner.length; x++) {
                 if (inputLettre === motADeviner[x]) {
                     // On remplace la lettre masquée
                     myTab[x] = inputLettre 
@@ -262,7 +250,7 @@ function lancerJeu() {
             // On diminue les coups restant d'une unité
             coupRestant --
             // Mise à jour du message d'information
-            infoContinue = "Oups, mauvaise pioche."
+            infoContinue = "Oups, mauvaise pioche."  
         }
         
         // On affiche le mot qu'il soit partiellemnt ou totalement chiffré 
@@ -274,13 +262,10 @@ function lancerJeu() {
             btnValiderLettre.disabled = true
             // On désactive le champs de saisie pour empêcher toute nouvelle saisie
             inputEcriture.disabled = true
-            // On active les boutons motSuivant et arreterJeu
-            btnMotSuivant.disabled = false
-            btnArreterJeu.disabled = false
             // Est-ce que c'est le mot qui à été trouvé ?
             if (motTrouver === motADeviner) {
                 // Bingo ! on met à jour le score
-                score++
+                score ++
                 // On met à jour les gains
                 gains += coupRestant
                 afficherProposition("BRAVOOO VOUS AVEZ GAGNE !!!")
@@ -288,23 +273,63 @@ function lancerJeu() {
                 afficherProposition("OUPS VOUS AVEZ PERDU !!!")
             }
             infoContinue = "<< Clickez sur Mot Suivant pour continuer ou Quittez le jeu. >>"
-            supprimeAffichageTentative()
+            afficherCoupRestant("")
+            afficherNbLettres("Le mot à trouver était : "+motADeviner)
             afficherInfos(infoContinue)
             afficherScore(score, nbMotsProposes)
             afficherGains(gains)
+            // On active les boutons Mot Suivant et Quittez le jeu
+            //btnDebuterJeu.disabled = false 
+            btnMotSuivant.disabled = false
+            btnArreterJeu.disabled = false 
+            // On réinitialise certaines variables              
+            coupRestant = nbCoups
         } else {
             // On affiche l'information à l'issue du traitement
             afficherInfos(infoContinue)
             // On affiche les tentatives restantes
-            afficherConpRestant(coupRestant)
+            afficherCoupRestant("encore : "+coupRestant+" coups")    
         }
-        
 
-        })
-            
-        
     })
-   
+
+    // Gestion de l'événement click sur le bouton "valider"
+    btnMotSuivant.addEventListener("click", () => {
+        // On appelle la fonction qui génére le mot à proposer 
+        let valeurs = genererLeMotPropose()
+        // On extrait les valeurs retournées
+        motADeviner = valeurs[0]
+        motTrouver = valeurs[1]
+        // On affiche le message qui informe sur le début de la partie
+        afficherInfos("Un autre mot à déviner !")
+        // On désactive le bouton "Mot Suivant" et "Quittez le jeu"
+        btnMotSuivant.disabled = true
+        btnArreterJeu.disabled = true
+        // On active le champs de saisie
+        inputEcriture.disabled = false
+        // On met à jour le nombre de mot proposé
+        nbMotsProposes ++
+        // On active le bouton validé
+        btnValiderLettre.disabled = false
+        console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner) 
+    })
+
+    // Gestion de l'événement click sur le bouton "valider"
+    btnArreterJeu.addEventListener("click", () => {
+        // On affiche le message d'au revoir
+        afficherProposition("AU REVOIR ET A BIENTÔT !")
+        // On efface la zone des indices
+        afficherNbLettres("")
+        afficherIndiceMot("")
+        // On désactive le bouton "Mot Suivant" et "Quittez le jeu"
+        btnMotSuivant.disabled = true
+        btnArreterJeu.disabled = true
+        // On active le bonton "lancez le jeu"
+        btnDebuterJeu.disabled = false
+        // On met à jour la zone d'information
+        afficherInfos("Vous avez gagné : " +gains+ " points, avec un score de : " +score+"/" +nbMotsProposes)
+     })
+
 }
     
 // On lance le jeu

@@ -47,7 +47,7 @@ const listeDesIndices = [
     "C'est bon pour la santé", "Surface", "Comme un rock", "C'est vital", "Base température", 
     "Fourniture scolaire", "Rafraîchissant", "Suite à la fermentation", "Extrait de la betterave", 
     "Unique", "Nous", "On", "Du corps", "Du corps", "Du corps", "Du corps", "... gardien",
-    "Elisabeth", "Figuier des jardin, couleur", "Couleur", "Couleur", "Le ciel est ...", "Jungle", 
+    "... Descartes", "Figuier des jardin, couleur", "Couleur", "Couleur", "Le ciel est ...", "Jungle", 
     "Boissons alcolisées", "Eau et terre", "Matériel informatique", "Matériel informatique", 
     "En bon état", "Porte", "Coton", "Uber", "Raisin", "Port de données", "... dans ton oeil, la paille...", 
     "Matériel informatique", "Chocolat", "Graines", "Inscrire une marque", "Assemblage de diverses choses", 
