@@ -196,6 +196,10 @@ function lancerJeu() {
     btnValiderLettre.disabled = true
     btnMotSuivant.disabled = true
     btnArreterJeu.disabled = true
+    for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
+        listeBtnRadio[indexBtnRadio].disabled = true
+    }
+
     // On désactive le champs de saisie pour empêcher toute saisie 
     // avant d'avoir lancez le jeu
     inputEcriture.disabled = true
@@ -223,12 +227,6 @@ function lancerJeu() {
         inputEcriture.disabled = false
         // On met à jour le nombre de mot proposé
         nbMotsProposes ++
-        // On active les boutons radios
-        for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
-            listeBtnRadio[indexBtnRadio].disabled = false
-        }
-        // On coche le bouton radio "sans indice" par défaut
-        listeBtnRadio[0].checked = true
         // On active le bouton validé
         btnValiderLettre.disabled = false
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)        
@@ -289,8 +287,7 @@ function lancerJeu() {
             afficherInfos(infoContinue)
             afficherScore(score, nbMotsProposes)
             afficherGains(gains)
-            // On active les boutons Mot Suivant et Quittez le jeu
-            //btnDebuterJeu.disabled = false 
+            // On active les boutons Mot Suivant et Quittez le jeu 
             btnMotSuivant.disabled = false
             btnArreterJeu.disabled = false 
             // On réinitialise certaines variables              
@@ -323,12 +320,15 @@ function lancerJeu() {
         nbMotsProposes ++
         // On active le bouton validé
         btnValiderLettre.disabled = false
-        // On active les boutons radios
-        for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
+        // On active les boutons radios à condition que les gains soient supérieur à 4U
+        if (gains >= 5) {
+            for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
             listeBtnRadio[indexBtnRadio].disabled = false
+            afficherIndiceMot("Avec 5U, vous pouvez vous payer un indice...")
+            }
+        } else {
+            afficherIndiceMot("Il vous faut ou moins 5U pour achèter un indice :)")
         }
-        // On coche le bouton radio "sans indice" par défaut
-        listeBtnRadio[0].checked = true
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner) 
     })
 
@@ -359,15 +359,29 @@ function lancerJeu() {
             } else {
                 // Sinon nous voulons jouer ce mot avec l'indice
                 indice = listeDesIndices[i]
+                // On retranche 5U pour l'achat de l'indice
+                gains -= 5
+                // On met à jour l'affichage des gains
+                afficherGains(gains)
             }
             // Et on affiche l'indice. 
             afficherIndiceMot("Indice : "+indice)
+            // On réinitialise les boutons radios
+            listeBtnRadio[0].checked = true
             // On désactive les boutons radios
             for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
                 listeBtnRadio[indexBtnRadio].disabled = true
             }
         })
     }
+
+    // Gestion de l'événement submit sur le formulaire de partage. 
+    let form = document.querySelector("form")
+    form.addEventListener("submit", (event) => {
+        event.preventDefault()
+        let scoreEmail = `${score} / ${nbMotsProposes} ; total gains : ${gains}`
+        gererFormulaire(scoreEmail)
+    })
 
 }
     
