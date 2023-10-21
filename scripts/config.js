@@ -8,6 +8,12 @@
 // Nombre de coups par partie
 const nbCoups = 8
 
+// On se donne trois minutes pour déviner le mot proposé
+const departMinutes = 60
+
+// Variable pour le stockage de l'Id de setInterval
+let myTimerId
+
 // Déclaration de la liste contenant les mots proposés à l'utilisateur
 const listeMots = [
 "BONJOUR", "VOYAGE", "BIC", "SOURIS", "CHAISE", 

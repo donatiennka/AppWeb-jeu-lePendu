@@ -232,6 +232,63 @@ function genererLeMotPropose() {
 }
 
 /**
+ * Cette fonction en sorte que même en dessous de 10 on garde 
+ * deux chiffres, en insérant un zéro à la gauche du chiffre restant  
+ */
+function tjrs2Chiffres(nb) {
+    return (nb < 10) ? "0" + nb : nb
+}
+
+/**
+ * Cette fonction gére le singulier/pluriel 
+ * en fonction d'une valeur numérique donné, il rajoute un 's' ou non
+ * au libellé qui lui est fourni en paramètre  
+ */
+function singuPluriel(nb, libelle) {
+    return (nb > 1) ? libelle+"s" : libelle
+}
+
+/**
+ * Cette fonction réalise un compte à rebours à partir du nombre de seconde
+ * qui lui ai passé en paramètre  
+ */
+function timeCounter(temps) {
+    // On récupère la balise html correspondante
+    const timerElement = document.getElementById("timer")
+    
+    if (!myTimerId) {
+       myTimerId = setInterval( () => {
+        // On separe le temps en heures, minutes en en secondes
+        let heures = Math.floor(temps / 3600)                     
+        let minutes = Math.floor((temps - (heures * 3600))/60)
+        let secondes = parseInt(temps - (heures * 3600) - (minutes * 60))
+
+        // On fait en sorte que même en dessous de 10 on garde deux chiffres
+        // en insérant un zéro à la gauche du chiffre restant
+        heures = tjrs2Chiffres(heures)
+        minutes = tjrs2Chiffres(minutes)
+        secondes = tjrs2Chiffres(secondes)
+        
+        // On raffraichi l'affichage du timer à chaque seconde
+        timerElement.innerText = `${heures}:${minutes}:${secondes}`
+        // On s'assure que le timer s'arrête dés qu'il atteint zéro
+        temps = temps <= 0 ? 0 : temps + 1       
+        }, 1000)  
+    } 
+} 
+
+/**
+ * Cette fonction permet d'arrêté le chronomètre 
+ */
+function stopTimer() {
+    clearInterval(myTimerId)
+    // On réinitilise notre variable
+    myTimerId = null
+}
+
+
+
+/**
  * Cette fonction lance le jeu. 
  * Dès que le joueur clique sur "Lancez le jeu" la boucle de jeu se lance 
  * et s'arrêtera lorsque celui-ci cliquera sur "Quittez le jeu"
@@ -246,6 +303,9 @@ function lancerJeu() {
     let coupRestant = nbCoups
     let motTrouver = ""
     let infoContinue = ""
+    // le timer
+    //let temps = 5 * 60
+      
 
     let btnValiderLettre = document.getElementById("btnValiderLettre")
     let listeBtnRadio = document.querySelectorAll(".optionSource input")
@@ -292,17 +352,21 @@ function lancerJeu() {
         nbMotsProposes ++
         // On active le bouton validé
         btnValiderLettre.disabled = false
-        console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)        
-    })
+        console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)      
+    })   
     
     // Gestion de l'événement click sur le bouton "valider"
     btnValiderLettre.addEventListener("click", () => {
+        // On lance le chronomètre si ce dernier n'est pas déjà lancé
+        if (!myTimerId) {
+            timeCounter(1)
+        }
         // On converti la chaîne de caratère en tableau
         let myTab = motTrouver.split("")
         // On récupère la lettre tapez qu'on met systématique en majuscule
         let inputLettre = inputEcriture.value.toUpperCase()
         // On vide le champs de saisie
-        inputEcriture.value = ""           
+        inputEcriture.value = ""         
         // On test si la lettre saisie fait partir des lettres du mot proposé
         // Si oui on démasque les lettres correspondantes
         if (motADeviner.includes(inputLettre)) {
@@ -331,6 +395,8 @@ function lancerJeu() {
         if (motTrouver === motADeviner || coupRestant === 0) {
             // On désactive le bouton valider
             btnValiderLettre.disabled = true
+            // On arrête le chronomètre
+            stopTimer()
             // On désactive le champs de saisie pour empêcher toute nouvelle saisie
             inputEcriture.disabled = true
             // Est-ce que c'est le mot qui à été trouvé ?
@@ -411,7 +477,7 @@ function lancerJeu() {
         // On active le bonton "lancez le jeu"
         btnDebuterJeu.disabled = false
         // On met à jour la zone d'information
-        afficherInfos("Vous avez gagné : " +gains+ " points, avec un score de : " +score+"/" +nbMotsProposes)
+        afficherInfos("Vous avez gagné : " +gains+ " "+singuPluriel(gains, "point")+", avec un score de : " +score+"/" +nbMotsProposes)
      })
 
     // Gestion de l'événement change sur les boutons radios. 
