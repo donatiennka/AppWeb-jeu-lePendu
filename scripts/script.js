@@ -354,7 +354,13 @@ function lancerJeu() {
         btnValiderLettre.disabled = false
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)      
     })   
-    
+    // On associé l'événement clavier sur la touche "Entrer" au clic sur 
+    // le bouton "validez"
+    inputEcriture.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            btnValiderLettre.click()
+        }
+    })
     // Gestion de l'événement click sur le bouton "valider"
     btnValiderLettre.addEventListener("click", () => {
         // On lance le chronomètre si ce dernier n'est pas déjà lancé
