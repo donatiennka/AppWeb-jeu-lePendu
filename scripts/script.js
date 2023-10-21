@@ -233,7 +233,8 @@ function genererLeMotPropose() {
 
 /**
  * Cette fonction en sorte que même en dessous de 10 on garde 
- * deux chiffres, en insérant un zéro à la gauche du chiffre restant  
+ * deux chiffres, en insérant un zéro à la gauche du chiffre restant
+ * @param {number} nb : un nombre quelconque  
  */
 function tjrs2Chiffres(nb) {
     return (nb < 10) ? "0" + nb : nb
@@ -242,7 +243,9 @@ function tjrs2Chiffres(nb) {
 /**
  * Cette fonction gére le singulier/pluriel 
  * en fonction d'une valeur numérique donné, il rajoute un 's' ou non
- * au libellé qui lui est fourni en paramètre  
+ * au libellé qui lui est fourni en paramètre 
+ * @param {number} nb : un nombre à tester
+ * @param {string} libelle : le texte à modifier le cas écheant  
  */
 function singuPluriel(nb, libelle) {
     return (nb > 1) ? libelle+"s" : libelle
@@ -250,7 +253,8 @@ function singuPluriel(nb, libelle) {
 
 /**
  * Cette fonction réalise un compte à rebours à partir du nombre de seconde
- * qui lui ai passé en paramètre  
+ * qui lui ai passé en paramètre
+ * @param {number} temps : le nombre de seconde fourni  
  */
 function timeCounter(temps) {
     // On récupère la balise html correspondante
@@ -285,8 +289,6 @@ function stopTimer() {
     // On réinitilise notre variable
     myTimerId = null
 }
-
-
 
 /**
  * Cette fonction lance le jeu. 
@@ -326,7 +328,7 @@ function lancerJeu() {
     // On désactive le champs de saisie pour empêcher toute saisie 
     // avant d'avoir lancez le jeu
     inputEcriture.disabled = true
-   
+
     // Gestion de l'événement click sur le bouton "Lancez le jeu"
     btnDebuterJeu.addEventListener("click", () => {
         // Réinitialisation de certaines variables
@@ -459,10 +461,10 @@ function lancerJeu() {
         if (gains >= 5) {
             for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
             listeBtnRadio[indexBtnRadio].disabled = false
-            afficherIndiceMot("Avec 5U, vous pouvez vous payer un indice...")
+            afficherIndiceMot("Gains >= 5 : indice activé")
             }
         } else {
-            afficherIndiceMot("Il vous faut ou moins 5U pour achèter un indice :)")
+            afficherIndiceMot("Gains < 5 : indice désactivé")
         }
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner) 
     })
@@ -477,6 +479,10 @@ function lancerJeu() {
         // On désactive le bouton "Mot Suivant" et "Quittez le jeu"
         btnMotSuivant.disabled = true
         btnArreterJeu.disabled = true
+        // On désactive les boutons radios
+        for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
+            listeBtnRadio[indexBtnRadio].disabled = true
+        }
         // On initialise la popup pour le partage
         initAddEventListenerPopup()
         
@@ -517,7 +523,7 @@ function lancerJeu() {
     let form = document.querySelector("form")
     form.addEventListener("submit", (event) => {
         event.preventDefault()
-        let scoreEmail = `${score} / ${nbMotsProposes} ; total gains : ${gains}`
+        let scoreEmail = `${score} / ${nbMotsProposes} avec un total des gains de : ${gains}U`
         gererFormulaire(scoreEmail)
     })
 }
