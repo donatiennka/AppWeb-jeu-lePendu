@@ -266,16 +266,17 @@ function tabLettresAJouer(chaine) {
     console.log(lettresAJouer)
     // On fait appel au mélangeur de tableau
     melangerTab(lettresAJouer)
-    
+
     return lettresAJouer
 }
 
 /**
- * Cette fonction crée un tableau des lettres à jouer 
- * à partir du mot généré au hassard et deux lettres 
- * suplémentaires choisi au hassard 
+ * Cette fonction crée un tableau avec lettres à jouer 
+ * à partir du mot généré au hassard et quatre lettres 
+ * suplémentaires choisi au hassard
+ * @param {Array} tab : liste des lettres à jouer
  */
-function generate_table() {
+function generate_table(tab) {
     // get the reference for the body
     //var body = document.getElementsByTagName("body")[0];
     var zoneTab = document.querySelector(".table span");
@@ -289,13 +290,13 @@ function generate_table() {
       // creates a table row
       var row = document.createElement("tr");
   
-      for (var j = 0; j < 10; j++) {
+      for (var j = 0; j < tab.length; j++) {
         // Create a <td> element and a text node, make the text
         // node the contents of the <td>, and put the <td> at
         // the end of the table row
         var cell = document.createElement("td");
         var cellText = document.createTextNode(
-         "T"+j,
+         tab[j],
         );
         cell.appendChild(cellText);
         row.appendChild(cell);
@@ -441,8 +442,10 @@ function lancerJeu() {
         i = valeurs[0]
         motADeviner = valeurs[1]
         motTrouver = valeurs[2]
+        // On récupére les lettres à jouer
+        const arr = tabLettresAJouer(motADeviner)
         // On affiche le tableau des lettres du jeu
-        generate_table()
+        generate_table(arr)
         // On affiche le message qui informe sur le début de la partie
         afficherInfos("C'est partie !")
         // On désactive le bouton "Lancer le jeu"
@@ -454,7 +457,7 @@ function lancerJeu() {
         // On active le bouton validé
         btnValiderLettre.disabled = false
         ////////////////
-        const arr = tabLettresAJouer(motADeviner)
+        
         console.log(arr)
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)      
     })   
