@@ -93,18 +93,6 @@ function afficherCoupRestant(text) {
     zoneTentative.innerText = text
 }
 
-/////////////////////////
-/**
- * Cette fonction affiche un tableau contenant les lettres à jouer 
- * dans la zone "table"
- * @param {string} tbl : pour mettre à jour les coups restants à jouer
- */
-function afficherTableau(tbl) {
-    let table = document.querySelector(".table span")
-    table.innerHTML = tbl
-}
-////////////////////////
-
 /**
  * Cette fonction remplace le mot à déviner par une chaine de "#" de même 
  * longueur que le mot proposé
@@ -242,6 +230,24 @@ function genererLeMotPropose() {
     const valeurs = [i, motADeviner, motTrouver]
     return valeurs
 }
+
+/**
+ * L’idée derrière l’algorithme de Fisher-Yates est de marcher
+ * vers le tableau dans l’ordre inverse et d’échanger chaque 
+ * élément avec un élément aléatoire avant lui. 
+ * Fisher-Yates est un algorithme simple mais très 
+ * efficace et rapide.
+ * @param {Array} arr : tableau à mélanger   
+ */
+function melangerTab(arr) {
+    // fisherYatesShuffle
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));  // random index
+      [arr[i], arr[j]] = [arr[j], arr[i]];          // swap
+    }
+  }
+
+
 
 /**
  * Cette fonction crée un tableau des lettres à jouer 
@@ -414,7 +420,7 @@ function lancerJeu() {
         i = valeurs[0]
         motADeviner = valeurs[1]
         motTrouver = valeurs[2]
-
+        // On affiche le tableau des lettres du jeu
         generate_table()
         // On affiche le message qui informe sur le début de la partie
         afficherInfos("C'est partie !")
@@ -426,6 +432,9 @@ function lancerJeu() {
         nbMotsProposes ++
         // On active le bouton validé
         btnValiderLettre.disabled = false
+        ////////////////
+        const arr = tabLettresAJouer(motADeviner)
+        console.log(arr)
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)      
     })   
     // On associé l'événement clavier sur la touche "Entrer" au clic sur 
