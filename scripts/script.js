@@ -93,6 +93,18 @@ function afficherCoupRestant(text) {
     zoneTentative.innerText = text
 }
 
+/////////////////////////
+/**
+ * Cette fonction affiche un tableau contenant les lettres à jouer 
+ * dans la zone "table"
+ * @param {string} tbl : pour mettre à jour les coups restants à jouer
+ */
+function afficherTableau(tbl) {
+    let table = document.querySelector(".table span")
+    table.innerHTML = tbl
+}
+////////////////////////
+
 /**
  * Cette fonction remplace le mot à déviner par une chaine de "#" de même 
  * longueur que le mot proposé
@@ -232,6 +244,64 @@ function genererLeMotPropose() {
 }
 
 /**
+ * Cette fonction crée un tableau des lettres à jouer 
+ * à partir du mot généré au hassard et deux lettres 
+ * suplémentaires choisi au hassard 
+ */
+function generate_table() {
+    // get the reference for the body
+    //var body = document.getElementsByTagName("body")[0];
+    var zoneTab = document.querySelector(".table span");
+  
+    // creates a <table> element and a <tbody> element
+    var tbl = document.createElement("table");
+    var tblBody = document.createElement("tbody");
+  
+    // creating all cells
+    for (var i = 0; i < 1; i++) {
+      // creates a table row
+      var row = document.createElement("tr");
+  
+      for (var j = 0; j < 10; j++) {
+        // Create a <td> element and a text node, make the text
+        // node the contents of the <td>, and put the <td> at
+        // the end of the table row
+        var cell = document.createElement("td");
+        var cellText = document.createTextNode(
+         "T"+j,
+        );
+        cell.appendChild(cellText);
+        row.appendChild(cell);
+
+        // On ajoute un gestionnaire d'événement pour chaque cellule
+        // du tableau de lettres
+        cell.addEventListener("click", (event) => {
+            // On récupére les coordonnées de la cellule cliqué
+            const ncol = event.target
+            // On détermine l'id de la celle à partir de ses coordonnées
+            const colId = ncol.cellIndex
+            // On recupére le contenu de la cellule de l'index correspondant
+            const choix = tbl.rows[0].cells[colId].innerText
+            console.log(choix)
+        })
+
+        cell.style.background = "rgb(255,0,0)";
+        cell.style.border = "2px, rgb(0,255,0)";
+        cell.style.fontSize = "26px"
+        cell.style.padding = "10px";
+      }
+  
+      // add the row to the end of the table body
+      tblBody.appendChild(row);
+    }
+  
+    // put the <tbody> in the <table>
+    tbl.appendChild(tblBody);
+    // On affiche le tableau des lettres à joueur dans la zone concernée
+    zoneTab.appendChild(tbl);
+  }
+
+/**
  * Cette fonction en sorte que même en dessous de 10 on garde 
  * deux chiffres, en insérant un zéro à la gauche du chiffre restant
  * @param {number} nb : un nombre quelconque  
@@ -344,6 +414,8 @@ function lancerJeu() {
         i = valeurs[0]
         motADeviner = valeurs[1]
         motTrouver = valeurs[2]
+
+        generate_table()
         // On affiche le message qui informe sur le début de la partie
         afficherInfos("C'est partie !")
         // On désactive le bouton "Lancer le jeu"
