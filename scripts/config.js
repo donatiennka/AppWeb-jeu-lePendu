@@ -8,6 +8,14 @@
 // Nombre de coups par partie
 const nbCoups = 8
 
+//les autres variables
+let motTrouver 
+let motADeviner 
+let coupRestant = 8
+let nbMotsProposes 
+let score 
+let gains 
+
 // On se donne trois minutes pour déviner le mot proposé
 const departMinutes = 60
 
