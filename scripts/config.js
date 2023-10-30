@@ -64,3 +64,11 @@ const listeDesIndices = [
     "la pierre", "Sur les murs", "Bibliothèque", "Réligion", "Phrase", "Alphabet", "Un adulte", 
     "Venus", "Adam", "Que la lumière soit"
 ]
+
+// Liste des lettres de l'alphabet
+const alphabet = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 
+    'H', 'I', 'J', 'K', 'L', 'M', 'N', 
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 
+    'V', 'W', 'X', 'Y', 'Z'
+]
