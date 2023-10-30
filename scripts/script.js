@@ -247,7 +247,28 @@ function melangerTab(arr) {
     }
   }
 
-
+/**
+ * Cette fonction une table de lettres à jouer 
+ * @param {string} chaine : indice du mot à trouver 
+ */
+function tabLettresAJouer(chaine) {
+    // On converti la chaîne de caratère en tableau
+    const bonnesLettres = chaine.split("")
+    // A chaque mot à proposer, on ajoute quatre lettres inutiles
+    const lettresEnPlus = []
+    for (let i = 0; i < 4; i++) {
+        // On choisi un lettre aléatoirement
+        let j = getRandomInt(0, alphabet.length)
+        lettresEnPlus.push(alphabet[j])
+    }
+    // On fusione les deux tableaux (bonnes lettres + lettres inutiles)
+    const lettresAJouer = bonnesLettres.concat(lettresEnPlus)
+    console.log(lettresAJouer)
+    // On fait appel au mélangeur de tableau
+    melangerTab(lettresAJouer)
+    
+    return lettresAJouer
+}
 
 /**
  * Cette fonction crée un tableau des lettres à jouer 
