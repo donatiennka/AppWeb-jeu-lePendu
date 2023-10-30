@@ -407,6 +407,10 @@ function lancerJeu() {
             stopTimer()
             // On désactive le champs de saisie pour empêcher toute nouvelle saisie
             inputEcriture.disabled = true
+            // On désactive les boutons radios
+            for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
+            listeBtnRadio[indexBtnRadio].disabled = true
+            }
             // Est-ce que c'est le mot qui à été trouvé ?
             if (motTrouver === motADeviner) {
                 // Bingo ! on met à jour le score
@@ -435,7 +439,6 @@ function lancerJeu() {
             // On affiche les tentatives restantes
             afficherCoupRestant("encore : "+coupRestant+" coups")    
         }
-
     })
 
     // Gestion de l'événement click sur le bouton "Mot Suivant"
