@@ -15,6 +15,7 @@ let coupRestant = 8
 let nbMotsProposes 
 let score 
 let gains 
+let deja = ""
 
 // On se donne trois minutes pour déviner le mot proposé
 const departMinutes = 60
