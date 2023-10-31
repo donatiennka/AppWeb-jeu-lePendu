@@ -48,20 +48,20 @@ function getRandomInt(min, max) {
  * dans la zone "zoneProposition"
  * @param {string} proposition : la proposition à afficher
  */
-function afficherProposition(proposition) {
-    let zoneProposition = document.querySelector(".zoneProposition")
+/*function afficherInfos(proposition) {
+    let zoneProposition = document.querySelector(".zoneInfos #synthe")
     zoneProposition.innerText = proposition
-}
+}*/
 
 /**
  * Cette fonction affiche le nombre de lettres du mot proposé, 
  * dans la zone "nombreDeLettre"
  * @param {string} chaine : La longueur du mot proposé
- */
+ *//*
 function afficherNbLettres(chaine) {
     let zoneNbLettres = document.querySelector(".nombreDeLettre span")
     zoneNbLettres.innerText = chaine
-}
+}*/
 
 /**
  * Cette fonction affiche un indice, pour aider le joueur qui le souhaite, 
@@ -79,7 +79,7 @@ function afficherIndiceMot(indiceMot) {
  * @param {string} chaineInfo : pour mettre à jour les information de la partie
  */
 function afficherInfos(chaineInfo) {
-    let zoneInfos = document.querySelector(".info span")
+    let zoneInfos = document.querySelector(".infos span")
     zoneInfos.innerText = chaineInfo
 }
 
@@ -91,6 +91,31 @@ function afficherInfos(chaineInfo) {
 function afficherCoupRestant(text) {
     let zoneTentative = document.querySelector(".tentative span")
     zoneTentative.innerText = text
+}
+
+/**
+ * Cette fonction affiche un texte dans la zone table
+ * @param {string} text : text
+ */
+function afficherTexte(text) {
+    let zoneTabText = document.querySelector(".autresInfos span")
+    zoneTabText.innerText = text
+}
+
+/**
+ * Cette fonction supprime la table des lettres à jouer
+ */
+function supprimerTable() {
+    let zoneTab = document.querySelector(".zoneSaisie span")
+    zoneTab.innerHTML = ""
+}
+
+/**
+ * Cette fonction supprime la table de résultat
+ */
+function supprimerTableResul() {
+    let zoneTab = document.querySelector(".resultat span")
+    zoneTab.innerHTML = ""
 }
 
 /**
@@ -220,14 +245,14 @@ function genererLeMotPropose() {
     let i = getRandomInt(0, listeMots.length)
     // On extrait le mot à proposé de la liste des mots
     // de façon aléatoire grâce à la méthode getRandomInt
-    let motADeviner = listeMots[i]
+    let motChoisi = listeMots[i]
     // On affiche le mot proposé mais en le masquant
-    motTrouver = masquerLeMot(motADeviner.length)
-    afficherProposition(motTrouver)
+    motTrouv = masquerLeMot(motChoisi.length)
+    //generate_tablePropos(motTrouv)
     // On affiche la longueur du mot proposé
-    afficherNbLettres("...mot de "+motADeviner.length+" lettres")
+    //afficherNbLettres("...mot de "+motChoisi.length+" lettres")
     //On retoune la liste des valeurs générées
-    const valeurs = [i, motADeviner, motTrouver]
+    const valeurs = [i, motChoisi, motTrouv]
     return valeurs
 }
 
@@ -241,8 +266,8 @@ function genererLeMotPropose() {
  */
 function melangerTab(arr) {
     // fisherYatesShuffle
-    for (var i = arr.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));  // random index
+    for (let i = arr.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));  // random index
       [arr[i], arr[j]] = [arr[j], arr[i]];          // swap
     }
   }
@@ -278,24 +303,26 @@ function tabLettresAJouer(chaine) {
  */
 function generate_table(tab) {
     // get the reference for the body
-    //var body = document.getElementsByTagName("body")[0];
-    var zoneTab = document.querySelector(".table span");
-  
+    //let body = document.getElementsByTagName("body")[0];
+    let zoneTab = document.querySelector(".zoneSaisie span");
+    
+    // On supprime d'abord ce qui est dans cette zone
+    supprimerTable();
     // creates a <table> element and a <tbody> element
-    var tbl = document.createElement("table");
-    var tblBody = document.createElement("tbody");
+    let tbl = document.createElement("table");
+    let tblBody = document.createElement("tbody");
   
     // creating all cells
-    for (var i = 0; i < 1; i++) {
+    for (let i = 0; i < 1; i++) {
       // creates a table row
-      var row = document.createElement("tr");
+      let row = document.createElement("tr");
   
-      for (var j = 0; j < tab.length; j++) {
+      for (let j = 0; j < tab.length; j++) {
         // Create a <td> element and a text node, make the text
         // node the contents of the <td>, and put the <td> at
         // the end of the table row
-        var cell = document.createElement("td");
-        var cellText = document.createTextNode(
+        let cell = document.createElement("td");
+        let cellText = document.createTextNode(
          tab[j],
         );
         cell.appendChild(cellText);
@@ -311,12 +338,8 @@ function generate_table(tab) {
             // On recupére le contenu de la cellule de l'index correspondant
             const choix = tbl.rows[0].cells[colId].innerText
             console.log(choix)
+            validerLettre(choix)
         })
-
-        cell.style.background = "rgb(255,0,0)";
-        cell.style.border = "2px, rgb(0,255,0)";
-        cell.style.fontSize = "26px"
-        cell.style.padding = "10px";
       }
   
       // add the row to the end of the table body
@@ -325,9 +348,62 @@ function generate_table(tab) {
   
     // put the <tbody> in the <table>
     tbl.appendChild(tblBody);
+    // Ce gestionnaire sera exécuté à chaque fois que le curseur
+    // se déplacera sur un autre élément de la liste
+    tbl.addEventListener("mouseenter", (event) => {
+        event.target.style.cursor = "pointer"
+        event.target.style.background = "orange"
+
+        // on réinitialise la couleur après quelques instants
+        setTimeout(function() {
+            event.target.style.background = ""
+        }, 500)
+    },
+    false,
+    )
     // On affiche le tableau des lettres à joueur dans la zone concernée
     zoneTab.appendChild(tbl);
+    afficherTexte("Les lettres à jouer sont affichez ci-desous.")
   }
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+function generate_tablePropos(resulTab) {
+    // get the reference for the body
+    //let body = document.getElementsByTagName("body")[0];
+    let zoneProposition = document.querySelector(".resultat span");
+    
+    // On supprime d'abord ce qui est dans cette zone
+    supprimerTableResul();
+    // creates a <table> element and a <tbody> element
+    let tbl = document.createElement("table");
+    let tblBody = document.createElement("tbody");
+  
+    // creating all cells
+    for (let i = 0; i < 1; i++) {
+      // creates a table row
+      let row = document.createElement("tr");
+  
+      for (let j = 0; j < resulTab.length; j++) {
+        // Create a <td> element and a text node, make the text
+        // node the contents of the <td>, and put the <td> at
+        // the end of the table row
+        let cell = document.createElement("td");
+        let cellText = document.createTextNode(
+         resulTab[j],
+        );
+        cell.appendChild(cellText);
+        row.appendChild(cell);
+      }
+  
+      // add the row to the end of the table body
+      tblBody.appendChild(row);
+    }
+    // put the <tbody> in the <table>
+    tbl.appendChild(tblBody);
+    // On affiche le tableau résultat
+    zoneProposition.appendChild(tbl);
+}
 
 /**
  * Cette fonction en sorte que même en dessous de 10 on garde 
@@ -384,8 +460,106 @@ function timeCounter(temps) {
  */
 function stopTimer() {
     clearInterval(myTimerId)
-    // On réinitilise notre variable
+    // On réinitilise notre letiable
     myTimerId = null
+}
+
+
+/**
+ * Cette fonction gére l'évement click sur une lettre du tableau 
+ */
+function validerLettre(choix) {
+    // On récupére les paramètres    
+    let listeBtnRadio = document.querySelectorAll(".optionSource input")    
+    // On lance le chronomètre si ce dernier n'est pas déjà lancé
+    if (!myTimerId) {
+        timeCounter(1)
+    }
+
+    // On converti la chaîne de caratère en tableau
+    let myTab = motTrouver.split("")
+    // On récupère la lettre tapez qu'on met systématique en majuscule
+    //let inputLettre = inputEcriture.value.toUpperCase()
+    // On vide le champs de saisie
+    //inputEcriture.value = ""         
+    // On test si la lettre saisie fait partir des lettres du mot proposé
+    // Si oui on démasque les lettres correspondantes
+    if (deja.includes(choix)){
+        infoContinue = "Déjà joué, soyez vigilent 🤦‍♀️💤⁉️"
+        afficherTexte("Dommage, vous perdez 2 coups 🤧🔥")
+        coupRestant -= 2
+    } else {
+        afficherTexte("")
+        if (motADeviner.includes(choix)) {
+            // Mise à jour du message d'information
+            infoContinue = "Bien joué 👍!"
+            // On parcours le mot à déviner pour recupérer la position des lettres
+            // à remplacer
+            for (let x = 0; x < motADeviner.length; x++) {
+                if (choix === motADeviner[x]) {
+                    // On remplace la lettre masquée
+                    myTab[x] = choix 
+                }
+            }  
+        
+        } else {
+            // On diminue les coups restant d'une unité
+            coupRestant --
+            // Mise à jour du message d'information
+            infoContinue = "Oups, mauvaise pioche 😒."  
+        }
+        deja += choix
+        console.log(deja)
+    }
+
+    // On affiche le mot qu'il soit partiellemnt ou totalement chiffré 
+    motTrouver = myTab.join("")
+    supprimerTableResul()
+    generate_tablePropos(motTrouver)
+    // On test si le joueur à trouver le mot ou si il n'a plus de coups à jouer.
+    if (motTrouver === motADeviner || coupRestant <= 0) {
+        // On désactive le bouton valider
+        //btnValiderLettre.disabled = true
+        // On arrête le chronomètre
+        stopTimer()
+        // On désactive le champs de saisie pour empêcher toute nouvelle saisie
+        //inputEcriture.disabled = true
+        // On désactive les boutons radios
+        for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
+        listeBtnRadio[indexBtnRadio].disabled = true
+        }
+        supprimerTableResul
+        // Est-ce que c'est le mot qui à été trouvé ?
+        if (motTrouver === motADeviner) {
+            // Bingo ! on met à jour le score
+            score ++
+            // On met à jour les gains
+            gains += coupRestant
+            afficherInfos("BRAVOOO VOUS AVEZ GAGNE !!!")
+        } else {
+            afficherInfos("OUPS VOUS AVEZ PERDU !!!")
+        }
+        
+        supprimerTable()
+        afficherTexte(" Clickez sur Mot Suivant ou Quittez le jeu ")
+        afficherCoupRestant("")
+        //afficherNbLettres("Le mot à trouver était : "+motADeviner)
+        afficherIndiceMot("")
+        afficherInfos(infoContinue)
+        afficherScore(score, nbMotsProposes)
+        afficherGains(gains)
+        // On active les boutons Mot Suivant et Quittez le jeu 
+        btnMotSuivant.disabled = false
+        btnArreterJeu.disabled = false 
+        // On réinitialise certaines letiables              
+        coupRestant = nbCoups
+        deja = ""
+    } else {
+        // On affiche l'information à l'issue du traitement
+        afficherInfos(infoContinue)
+        // On affiche les tentatives restantes
+        afficherCoupRestant("encore : "+coupRestant+" coups")    
+    }
 }
 
 /**
@@ -394,29 +568,19 @@ function stopTimer() {
  * et s'arrêtera lorsque celui-ci cliquera sur "Quittez le jeu"
  */
 function lancerJeu() {
-    // Initialisations
-    let score = 0
-    let gains = 0
     let i = 0
-    let motADeviner = ""
-    let nbMotsProposes = 0
-    let coupRestant = nbCoups
-    let motTrouver = ""
-    let infoContinue = ""
-    // le timer
-    //let temps = 5 * 60
-      
+    //let infoContinue = ""      
 
-    let btnValiderLettre = document.getElementById("btnValiderLettre")
+    //let btnValiderLettre = document.getElementById("btnValiderLettre")
     let listeBtnRadio = document.querySelectorAll(".optionSource input")
-    let inputEcriture = document.getElementById("inputEcriture")
+    //let inputEcriture = document.getElementById("inputEcriture")
 
     let btnDebuterJeu = document.getElementById("btnDebuterJeu")
     let btnMotSuivant = document.getElementById("btnMotSuivant")
     let btnArreterJeu = document.getElementById("btnArreterJeu")
 
     // On désactive tous les boutons qui doivent l'être au départ
-    btnValiderLettre.disabled = true
+    //btnValiderLettre.disabled = true
     btnMotSuivant.disabled = true
     btnArreterJeu.disabled = true
     for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
@@ -425,11 +589,11 @@ function lancerJeu() {
 
     // On désactive le champs de saisie pour empêcher toute saisie 
     // avant d'avoir lancez le jeu
-    inputEcriture.disabled = true
+    //inputEcriture.disabled = true
 
     // Gestion de l'événement click sur le bouton "Lancez le jeu"
     btnDebuterJeu.addEventListener("click", () => {
-        // Réinitialisation de certaines variables
+        // Réinitialisation de certaines letiables
         score = 0
         gains = 0
         nbMotsProposes = 0
@@ -442,28 +606,30 @@ function lancerJeu() {
         i = valeurs[0]
         motADeviner = valeurs[1]
         motTrouver = valeurs[2]
+        
         // On récupére les lettres à jouer
         const arr = tabLettresAJouer(motADeviner)
         // On affiche le tableau des lettres du jeu
         generate_table(arr)
         // On affiche le message qui informe sur le début de la partie
-        afficherInfos("C'est partie !")
+        afficherInfos("C'est partie ⁉️😎")
         // On désactive le bouton "Lancer le jeu"
         btnDebuterJeu.disabled = true
         // On active le champs de saisie
-        inputEcriture.disabled = false
+        //inputEcriture.disabled = false
         // On met à jour le nombre de mot proposé
         nbMotsProposes ++
-        // On active le bouton validé
-        btnValiderLettre.disabled = false
-        ////////////////
-        
+        // On supprime l'ancien resultat
+        supprimerTableResul()
+        // on affiche notre table de résultat
+        generate_tablePropos(motTrouver)
+                
         console.log(arr)
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner)      
     })   
     // On associé l'événement clavier sur la touche "Entrer" au clic sur 
     // le bouton "validez"
-    inputEcriture.addEventListener("keypress", (event) => {
+    /*inputEcriture.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
             btnValiderLettre.click()
         }
@@ -503,7 +669,7 @@ function lancerJeu() {
         
         // On affiche le mot qu'il soit partiellemnt ou totalement chiffré 
         motTrouver = myTab.join("")
-        afficherProposition(motTrouver)
+        afficherInfos(motTrouver)
         // On test si le joueur à trouver le mot ou si il n'a plus de coups à jouer.
         if (motTrouver === motADeviner || coupRestant === 0) {
             // On désactive le bouton valider
@@ -522,9 +688,9 @@ function lancerJeu() {
                 score ++
                 // On met à jour les gains
                 gains += coupRestant
-                afficherProposition("BRAVOOO VOUS AVEZ GAGNE !!!")
+                afficherInfos("BRAVOOO VOUS AVEZ GAGNE !!!")
             } else {
-                afficherProposition("OUPS VOUS AVEZ PERDU !!!")
+                afficherInfos("OUPS VOUS AVEZ PERDU !!!")
             }
             infoContinue = "<< Clickez sur Mot Suivant pour continuer ou Quittez le jeu. >>"
             afficherCoupRestant("")
@@ -536,7 +702,7 @@ function lancerJeu() {
             // On active les boutons Mot Suivant et Quittez le jeu 
             btnMotSuivant.disabled = false
             btnArreterJeu.disabled = false 
-            // On réinitialise certaines variables              
+            // On réinitialise certaines letiables              
             coupRestant = nbCoups
         } else {
             // On affiche l'information à l'issue du traitement
@@ -544,7 +710,7 @@ function lancerJeu() {
             // On affiche les tentatives restantes
             afficherCoupRestant("encore : "+coupRestant+" coups")    
         }
-    })
+    })*/
 
     // Gestion de l'événement click sur le bouton "Mot Suivant"
     btnMotSuivant.addEventListener("click", () => {
@@ -554,17 +720,21 @@ function lancerJeu() {
         i = valeurs[0]
         motADeviner = valeurs[1]
         motTrouver = valeurs[2]
+        // On supprime l'ancien resultat
+        supprimerTableResul()
+        // on affiche notre table de résultat
+        generate_tablePropos(motTrouver)
         // On affiche le message qui informe sur le début de la partie
-        afficherInfos("Un autre mot à déviner !")
+        afficherTexte("Un autre mot à déviner !")
         // On désactive le bouton "Mot Suivant" et "Quittez le jeu"
         btnMotSuivant.disabled = true
         btnArreterJeu.disabled = true
         // On active le champs de saisie
-        inputEcriture.disabled = false
+        //inputEcriture.disabled = false
         // On met à jour le nombre de mot proposé
         nbMotsProposes ++
         // On active le bouton validé
-        btnValiderLettre.disabled = false
+        //btnValiderLettre.disabled = false
         // On active les boutons radios à condition que les gains soient supérieur à 4U
         if (gains >= 5) {
             for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
@@ -574,16 +744,21 @@ function lancerJeu() {
         } else {
             afficherIndiceMot("Gains < 5 : indice désactivé")
         }
+        // On récupére les lettres à jouer
+        const arr = tabLettresAJouer(motADeviner)
+        // On affiche le tableau des lettres du jeu
+        generate_table(arr)
         console.log("motTrouver : "+motTrouver +" motADeviner : "+motADeviner) 
     })
 
     // Gestion de l'événement click sur le bouton "Quittez le jeu"
     btnArreterJeu.addEventListener("click", () => {
         // On affiche le message d'au revoir
-        afficherProposition("AU REVOIR ET A BIENTÔT !")
+        supprimerTableResul()
+        afficherInfos("AU REVOIR ET A BIENTÔT !")
         // On efface la zone des indices
-        afficherNbLettres("")
-        afficherIndiceMot("")
+        //afficherNbLettres("")
+        //afficherIndiceMot("")
         // On désactive le bouton "Mot Suivant" et "Quittez le jeu"
         btnMotSuivant.disabled = true
         btnArreterJeu.disabled = true
@@ -597,7 +772,7 @@ function lancerJeu() {
         // On active le bonton "lancez le jeu"
         btnDebuterJeu.disabled = false
         // On met à jour la zone d'information
-        afficherInfos("Vous avez gagné : " +gains+ " "+singuPluriel(gains, "point")+", avec un score de : " +score+"/" +nbMotsProposes)
+        afficherTexte("Vous avez gagné : " +gains+ " "+singuPluriel(gains, "point")+", avec un score de : " +score+"/" +nbMotsProposes)
      })
 
     // Gestion de l'événement change sur les boutons radios. 
