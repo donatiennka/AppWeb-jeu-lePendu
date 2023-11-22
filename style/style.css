@@ -176,13 +176,13 @@ footer {
 }
 
 /* Zone du compte à rebours (timer) */
-.panneauCentral #timer {
+/*.panneauCentral #timer {
     align-self: flex-end;
     padding-left: 5px;
     padding-right: 5px;
     font-weight: bold;
     box-shadow: 5px 3px 5px #eb9d79;
- }
+ }*/
 
  /* Affichage du tableau de resultat */
  .resultat {
@@ -267,6 +267,23 @@ footer {
     color: white;
     letter-spacing: 5px;
     align-self: flex-end;
+}
+*/
+
+.instructions form {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.instructions p {
+    width: 80%;
+}
+
+.instructions #timer {
+    width: 20%;
+    /*border-radius: 0;*/
+    border: solid 3px #3db36b;
 }
 
 /* Tableau des lettres */
