@@ -175,64 +175,116 @@ footer {
     box-shadow: 10px 10px 20px #f76c5e;
 }
 
+/* Zone du compte à rebours (timer) */
+.panneauCentral #timer {
+    align-self: flex-end;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-weight: bold;
+    box-shadow: 5px 3px 5px #eb9d79;
+ }
+
+ /* Affichage du tableau de resultat */
+ .resultat {
+    align-self: center;
+    margin-top: 10px;
+    margin-bottom: 0;
+ }
+ .resultat span td {
+    font-size: 30px;
+    font-weight: 700;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 0, 0, 1);
+    opacity: 0.8;
+}
+
 /* Zone des indices pour aider le joueur */
-.zoneDesIndices {
+.panneauCentral .zoneInfos {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     line-height: 1.5rem;
+    color: black;
     width: 90%;
     margin: 10px 0 10px 0;
-    padding: 10px;
-    font-size: 15px;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-/* Zone du compte à rebours (timer) */
-.zoneDesIndices #timer {
-   align-self: flex-end;
-   padding-left: 5px;
-   padding-right: 5px;
-   font-weight: bold;
-   box-shadow: 5px 3px 5px #eb9d79;
-}
-
-
-/* Zone ou sera affiché le texte (mot ou phrase) à afficher */
-.zoneProposition {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    margin: 10px 0 10px 0;
-    padding: 20px;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: white;
-    font-size: 30px;
-    font-weight: 600;
     color: var(--color-primary);
-}
-
-/* Zone d'information */
-.zoneInfos {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    width: 90%;
-    margin: 10px 0 10px 0;
-    padding: 10px;
     font-size: 15px;
     font-family: 'Courier New', Courier, monospace;
 }
 
-/* Zone de saisie */
-.zoneSaisie {
-    display: flex;
-    align-content: center;
-    justify-content: space-between;
-    width: 60%;
-    margin-top: 20px;
+.panneauCentral .zoneInfos .indice {
+    align-self: flex-start;
+    padding: 10px;
 }
+
+.panneauCentral .zoneInfos .infos {
+    align-self: center;
+    color: #f76c5e;
+    padding: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.panneauCentral .zoneInfos .infos p {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.panneauCentral .zoneInfos .infos p span{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.panneauCentral .zoneInfos .autresInfos {
+    align-self: center;
+    color: #0a86c4;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.panneauCentral .zoneInfos .autresInfos span{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+
+.panneauCentral .zoneInfos .tentative {
+    align-self: flex-end;
+    padding: 10px;
+}
+/*
+.panneauCentral .zoneInfos .instructions {
+    width: 100%;
+    background-color: #3db36b;
+    margin: 0;
+    font-size: 10px;
+    color: white;
+    letter-spacing: 5px;
+    align-self: flex-end;
+}
+
+/* Tableau des lettres */
+.zoneSaisie {
+    align-self: center;
+}
+
+.zoneSaisie span td {
+    font-size: 30px;
+    font-weight: 700;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 0, 0, 1);
+    opacity: 0.8;
+}
+
 
 /* Zone de contrôle */
 .zoneDeControle {
@@ -279,7 +331,7 @@ footer {
 .zoneSaisie button {
     width: 20%;
 }
- 
+
 .zonePartage {
     padding-top: 20px;
 }
@@ -380,15 +432,6 @@ footer {
         width: 90%;
     }
 
-    .zoneSaisie input[type='text'] {
-        width: 70%;
-        text-align: center;
-    }
-
-    .zoneSaisie button {
-        width: 30%;
-    }
-
     .zoneDeControle button{
         font-size: 14px;
     }
@@ -431,6 +474,7 @@ footer {
 
     .zoneSaisie {
         width: 90%;
+        align-self: center;
     }
 
     .zoneSaisie input[type='text'] {

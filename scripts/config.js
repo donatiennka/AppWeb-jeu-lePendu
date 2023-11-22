@@ -6,7 +6,16 @@
  *********************************************************************************/
 
 // Nombre de coups par partie
-const nbCoups = 8
+const nbCoups = 1
+
+//les autres variables
+let motTrouver 
+let motADeviner 
+let coupRestant = 1
+let nbMotsProposes 
+let score 
+let gains 
+let deja = ""
 
 // On se donne trois minutes pour déviner le mot proposé
 const departMinutes = 60
@@ -63,4 +72,12 @@ const listeDesIndices = [
     "Amas d'eau en suspension", "Cailloux", "Le soleil se lève", "La lune est visible", "Des fleuves et des mers", 
     "la pierre", "Sur les murs", "Bibliothèque", "Réligion", "Phrase", "Alphabet", "Un adulte", 
     "Venus", "Adam", "Que la lumière soit"
+]
+
+// Liste des lettres de l'alphabet
+const alphabet = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 
+    'H', 'I', 'J', 'K', 'L', 'M', 'N', 
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 
+    'V', 'W', 'X', 'Y', 'Z'
 ]
