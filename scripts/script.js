@@ -540,13 +540,13 @@ function validerLettre(choix) {
         for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
         listeBtnRadio[indexBtnRadio].disabled = true
         }
-        supprimerTableResul
+        supprimerTableResul()
         // Est-ce que c'est le mot qui à été trouvé ?
         if (motTrouver === motADeviner) {
             // Bingo ! on met à jour le score
             score ++
-            // On met à jour les gains
-            gains += coupRestant
+            // On met à jour les gains, un mot gagné donne droit à 3U
+            gains += 3
             afficherInfos("BRAVOOO VOUS AVEZ GAGNE 💪!!!")
             infoContinue = "🎉🎊🎊🎆🎈✨👑🎉🎉🎊"
         } else {
