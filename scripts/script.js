@@ -485,14 +485,15 @@ function validerLettre(choix) {
     // On test si la lettre saisie fait partir des lettres du mot proposé
     // Si oui on démasque les lettres correspondantes
     if (deja.includes(choix)){
-        infoContinue = "Déjà joué, soyez vigilent 🤦‍♀️💤⁉️"
-        afficherTexte("Dommage, vous perdez 2 coups 🤧🔥")
+        infoContinue = "Lettre déjà tapée, soyez vigilent 🤦‍♀️💤⁉️"
+        afficherInfos("Dommage, vous perdez 2 coups 🤧😱🥶")
         coupRestant -= 2
     } else {
         afficherTexte("")
         if (motADeviner.includes(choix)) {
             // Mise à jour du message d'information
-            infoContinue = "Bien joué 👍!"
+            infoContinue = "Bien joué 🔥👍💃!"
+            afficherInfos("Vous vous débrouillez très bien 😎👍🤑 ")
             // On parcours le mot à déviner pour recupérer la position des lettres
             // à remplacer
             for (let x = 0; x < motADeviner.length; x++) {
@@ -506,7 +507,8 @@ function validerLettre(choix) {
             // On diminue les coups restant d'une unité
             coupRestant --
             // Mise à jour du message d'information
-            infoContinue = "Oups, mauvaise pioche 😒."  
+            afficherInfos("Un peu plus d'effort... 🏋️😶‍🌫️😤 ")
+            infoContinue = "Oups, mauvaise pioche 😒🤦‍♀️."  
         }
         deja += choix
         console.log(deja)
@@ -535,9 +537,11 @@ function validerLettre(choix) {
             score ++
             // On met à jour les gains
             gains += coupRestant
-            afficherInfos("BRAVOOO VOUS AVEZ GAGNE !!!")
+            afficherInfos("BRAVOOO VOUS AVEZ GAGNE 💪!!!")
+            infoContinue = "🎉🎊🎊🎆🎈✨👑🎉🎉🎊"
         } else {
-            afficherInfos("OUPS VOUS AVEZ PERDU !!!")
+            afficherInfos("OUPS VOUS AVEZ PERDU 😰!!!")
+            infoContinue = "La prochaine fois sera la bonne 👌"
         }
         
         supprimerTable()
@@ -545,7 +549,7 @@ function validerLettre(choix) {
         afficherCoupRestant("")
         //afficherNbLettres("Le mot à trouver était : "+motADeviner)
         afficherIndiceMot("")
-        afficherInfos(infoContinue)
+        afficherTexte(infoContinue)
         afficherScore(score, nbMotsProposes)
         afficherGains(gains)
         // On active les boutons Mot Suivant et Quittez le jeu 
@@ -556,7 +560,7 @@ function validerLettre(choix) {
         deja = ""
     } else {
         // On affiche l'information à l'issue du traitement
-        afficherInfos(infoContinue)
+        afficherTexte(infoContinue)
         // On affiche les tentatives restantes
         afficherCoupRestant("encore : "+coupRestant+" coups")    
     }
@@ -725,6 +729,8 @@ function lancerJeu() {
         // on affiche notre table de résultat
         generate_tablePropos(motTrouver)
         // On affiche le message qui informe sur le début de la partie
+        afficherInfos("C'est partie ⁉️😎")
+        // On affiche le message qui informe sur le début de la partie
         afficherTexte("Un autre mot à déviner !")
         // On désactive le bouton "Mot Suivant" et "Quittez le jeu"
         btnMotSuivant.disabled = true
@@ -755,7 +761,7 @@ function lancerJeu() {
     btnArreterJeu.addEventListener("click", () => {
         // On affiche le message d'au revoir
         supprimerTableResul()
-        afficherInfos("AU REVOIR ET A BIENTÔT !")
+        afficherInfos("AU REVOIR ET A BIENTÔT 🎈!")
         // On efface la zone des indices
         //afficherNbLettres("")
         //afficherIndiceMot("")

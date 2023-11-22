@@ -14,8 +14,35 @@
         <script src="scripts/popup.js" defer></script>
         <script src="scripts/script.js" defer></script>
         <script src="scripts/main.js" defer></script>
+        <script LANGUAGE="JavaScript">
+            <!--
+            var texte = "Binvenue dans LePendu. | Trouvez le mot masqué d'un seul coup en utilisant les lettres qui s'affiche au bas de l'écran. | Pour choisir une lettre, vous devez cliqué sur celle ci.";
+            var msg = "                                                         ";
+            //espace entre chaque répétition du texte
+            var blanc = "                                                       ";
+            //nombre de répétition du texte, doit être >= 1
+            var nbTexte = 4;
+            
+            for(i=0;i<nbTexte;i++)
+              msg += texte + blanc;
+            
+            var timerID = null;
+            var delaiScroll = 150;
+            
+            function startScroll() {
+              document.formScroll.textScroll.value = msg;
+              window.status = msg;
+              msg = msg.substring(1, msg.length) + msg.substring(0, 1)
+              timerID = setTimeout("startScroll()", delaiScroll);
+            }
+            
+            function stopScroll() {
+              clearTimeout(timerID);
+            }
+            //-->
+            </script>
     </head>
-    <body>
+    <body onLoad="startScroll()" onUnLoad="stopScroll()">
         <!-- HEADER -->
         <header>
             <h1>Jeu-LePendu</h1>
@@ -59,7 +86,12 @@
                         <span>___</span>
                     </div>   
                     <div class="instructions">
-                        <span>Le Readme du jeu</span>
+                        <form name="formScroll">
+                            <p></span><input type="text" name="textScroll" 
+                                style="font-family: Courier New; color: white; 
+                                background-color: #3db36b; border-radius: 0;" 
+                                size="100%"></p>
+                        </form>
                     </div>
                 </div>
 

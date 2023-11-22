@@ -258,7 +258,7 @@ footer {
     align-self: flex-end;
     padding: 10px;
 }
-
+/*
 .panneauCentral .zoneInfos .instructions {
     width: 100%;
     background-color: #3db36b;
@@ -270,7 +270,7 @@ footer {
 }
 
 /* Tableau des lettres */
-.zoneSaisie  {
+.zoneSaisie {
     align-self: center;
 }
 
@@ -331,7 +331,7 @@ footer {
 .zoneSaisie button {
     width: 20%;
 }
- 
+
 .zonePartage {
     padding-top: 20px;
 }
@@ -432,15 +432,6 @@ footer {
         width: 90%;
     }
 
-    .zoneSaisie input[type='text'] {
-        width: 70%;
-        text-align: center;
-    }
-
-    .zoneSaisie button {
-        width: 30%;
-    }
-
     .zoneDeControle button{
         font-size: 14px;
     }
@@ -483,6 +474,7 @@ footer {
 
     .zoneSaisie {
         width: 90%;
+        align-self: center;
     }
 
     .zoneSaisie input[type='text'] {

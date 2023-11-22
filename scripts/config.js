@@ -6,12 +6,12 @@
  *********************************************************************************/
 
 // Nombre de coups par partie
-const nbCoups = 8
+const nbCoups = 1
 
 //les autres variables
 let motTrouver 
 let motADeviner 
-let coupRestant = 8
+let coupRestant = 1
 let nbMotsProposes 
 let score 
 let gains 
