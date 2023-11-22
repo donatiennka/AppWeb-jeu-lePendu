@@ -175,15 +175,6 @@ footer {
     box-shadow: 10px 10px 20px #f76c5e;
 }
 
-/* Zone du compte à rebours (timer) */
-.panneauCentral #timer {
-    align-self: flex-end;
-    padding-left: 5px;
-    padding-right: 5px;
-    font-weight: bold;
-    box-shadow: 5px 3px 5px #eb9d79;
- }
-
  /* Affichage du tableau de resultat */
  .resultat {
     align-self: center;
@@ -268,9 +259,26 @@ footer {
     letter-spacing: 5px;
     align-self: flex-end;
 }
+*/
+
+.instructions form {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.instructions p {
+    width: 75%;
+}
+
+.instructions #timer {
+    width: 25%;
+    border: solid 3px #3db36b;
+}
 
 /* Tableau des lettres */
 .zoneSaisie {
+    display: inline-table;
     align-self: center;
 }
 
@@ -473,7 +481,7 @@ footer {
 
 
     .zoneSaisie {
-        width: 90%;
+        width: 100%;
         align-self: center;
     }
 
@@ -488,7 +496,7 @@ footer {
 
     .zoneDeControle button{
         font-size: 14px;
-    }
+    } 
 
     .zoneDesComptes {
         flex-direction: column;
@@ -503,4 +511,5 @@ footer {
     .zoneInfos .info {
         margin-bottom: 10px;
     }
+
 }

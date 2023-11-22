@@ -426,6 +426,16 @@ function singuPluriel(nb, libelle) {
 }
 
 /**
+ * Cette fonction permet de remettre le timer à zéro  
+ */
+function remiseAZero() {
+    // On récupère la balise html correspondante
+    const timerElement = document.getElementById("timer")
+    // On affiche un timer à zéro
+    timerElement.innerText = "00:00:00"
+}
+
+/**
  * Cette fonction réalise un compte à rebours à partir du nombre de seconde
  * qui lui ai passé en paramètre
  * @param {number} temps : le nombre de seconde fourni  
@@ -530,13 +540,13 @@ function validerLettre(choix) {
         for (let indexBtnRadio = 0; indexBtnRadio < listeBtnRadio.length; indexBtnRadio++) {
         listeBtnRadio[indexBtnRadio].disabled = true
         }
-        supprimerTableResul
+        supprimerTableResul()
         // Est-ce que c'est le mot qui à été trouvé ?
         if (motTrouver === motADeviner) {
             // Bingo ! on met à jour le score
             score ++
-            // On met à jour les gains
-            gains += coupRestant
+            // On met à jour les gains, un mot gagné donne droit à 3U
+            gains += 3
             afficherInfos("BRAVOOO VOUS AVEZ GAGNE 💪!!!")
             infoContinue = "🎉🎊🎊🎆🎈✨👑🎉🎉🎊"
         } else {
@@ -604,6 +614,8 @@ function lancerJeu() {
         // On affiche le score et les gains rénitialisés
         afficherScore(score, nbMotsProposes)
         afficherGains(gains)
+        // on affiche un timer à zéro
+        remiseAZero()
         // On appelle la fonction qui génére le mot à proposer 
         let valeurs = genererLeMotPropose()
         // On extrait les valeurs retournées
@@ -728,6 +740,8 @@ function lancerJeu() {
         supprimerTableResul()
         // on affiche notre table de résultat
         generate_tablePropos(motTrouver)
+        // on affiche un timer à zéro
+        remiseAZero()
         // On affiche le message qui informe sur le début de la partie
         afficherInfos("C'est partie ⁉️😎")
         // On affiche le message qui informe sur le début de la partie

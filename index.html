@@ -15,7 +15,7 @@
         <script src="scripts/script.js" defer></script>
         <script src="scripts/main.js" defer></script>
         <script LANGUAGE="JavaScript">
-            <!--
+            
             var texte = "Binvenue dans LePendu. | Trouvez le mot masqué d'un seul coup en utilisant les lettres qui s'affiche au bas de l'écran. | Pour choisir une lettre, vous devez cliqué sur celle ci.";
             var msg = "                                                         ";
             //espace entre chaque répétition du texte
@@ -39,7 +39,7 @@
             function stopScroll() {
               clearTimeout(timerID);
             }
-            //-->
+            
             </script>
     </head>
     <body onLoad="startScroll()" onUnLoad="stopScroll()">
@@ -65,9 +65,9 @@
             </div>
 
             <div class="panneauCentral">
-                <div id="timer">
+               <!-- <div id="timer">
                     <span></span>
-                </div>
+                </div>-->
                 <div class="resultat">
                     <span></span>
                 </div>
@@ -87,11 +87,14 @@
                     </div>   
                     <div class="instructions">
                         <form name="formScroll">
-                            <p></span><input type="text" name="textScroll" 
+                            <p><input type="text" name="textScroll" 
                                 style="font-family: Courier New; color: white; 
                                 background-color: #3db36b; border-radius: 0;" 
-                                size="100%"></p>
+                                size="100%">
+                            </p>
+                            <div id="timer"><span>Timer</span></div>
                         </form>
+                        
                     </div>
                 </div>
 
